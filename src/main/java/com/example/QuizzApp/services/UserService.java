@@ -29,7 +29,7 @@ public class UserService implements IUserService {
             user.setEmail(userRegisterDTO.getEmail());
             user.setPassword(userRegisterDTO.getPassword());
             user.setAuthority(authorityRepository.findByName("ROLE_USER").get());
-            user.setIsConfirmed(true); // tmp
+            user.setIsconfirmed(true); // tmp
             return user;
         }
     }

@@ -15,7 +15,7 @@ public class User {
     private String username;
     private String password; //tmp min length
     private String email;
-    private Boolean isConfirmed = true; //tmp true
+    private Boolean isconfirmed = true; //tmp true
     @ManyToOne
     @JoinColumn(name="authority")
     private Authority authority;
