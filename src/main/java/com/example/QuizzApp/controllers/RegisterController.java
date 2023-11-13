@@ -7,7 +7,11 @@ import com.example.QuizzApp.models.User;
 import com.example.QuizzApp.repositories.UserRepository;
 import com.example.QuizzApp.services.UserService;
 import com.example.QuizzApp.utils.UserRegisterValidator;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,7 +38,8 @@ public class RegisterController {
         return registerPage;
     }
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute @Valid UserRegisterDTO userRegisterDTO, BindingResult bindingResult){
+    public String registerUser(@ModelAttribute @Valid UserRegisterDTO userRegisterDTO, BindingResult bindingResult,
+                               HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
 
         userRegisterValidator.validate(userRegisterDTO,bindingResult);
         try{
@@ -47,6 +52,8 @@ public class RegisterController {
         if(bindingResult.hasErrors()){
             return "/register";
         }
+        System.out.println(httpServletRequest.getSession().toString());
         return "redirect:/";
     }
+
 }
