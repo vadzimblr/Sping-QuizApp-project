@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}" />
 </head>
 <body>
 <h1>Registration form</h1>
 <form action="/register" th:object ="${user}" method="POST" enctype="utf8">
+    <input type="hidden" data-th-name="${_csrf.parameterName}"
+           data-th-value="${_csrf.token}">
     <div>
         <label>Username:</label>
         <input th:field="*{username}"/>

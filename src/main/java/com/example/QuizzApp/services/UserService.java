@@ -6,15 +6,22 @@ import com.example.QuizzApp.exceptions.UserWithUsernameAlreadyExistException;
 import com.example.QuizzApp.models.User;
 import com.example.QuizzApp.repositories.AuthorityRepository;
 import com.example.QuizzApp.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService implements IUserService {
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private AuthorityRepository authorityRepository;
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final AuthorityRepository authorityRepository;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authorityRepository = authorityRepository;
+    }
+
     @Override
     public User registerNewUserAccount(UserRegisterDTO userRegisterDTO) throws UserWithEmailAlreadyExistException,
                                                                             UserWithUsernameAlreadyExistException
@@ -27,7 +34,7 @@ public class UserService implements IUserService {
             User user = new User();
             user.setUsername(userRegisterDTO.getUsername());
             user.setEmail(userRegisterDTO.getEmail());
-            user.setPassword(userRegisterDTO.getPassword());
+            user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
             user.setAuthority(authorityRepository.findByName("ROLE_USER").get());
             user.setIsconfirmed(true); // tmp
             return user;
