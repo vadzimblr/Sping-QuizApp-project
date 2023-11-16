@@ -12,23 +12,23 @@ import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationService {
+public class AuthenticationService implements IAuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
     public AuthenticationService(AuthenticationManager authenticationManager, SecurityContextRepository securityContextRepository) {
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
     }
-    public void AuthenticateUser(String username, String password,
+    public void AuthenticateUser(String principal, String credentials,
                                  HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationServiceException {
-        if(username == null){
+        if(principal == null){
             throw new AuthenticationServiceException("The Username field cannot be empty or null");
-        } else if (password == null) {
+        } else if (credentials == null) {
             throw new AuthenticationServiceException("The Password field cannot be empty or null");
         }
         else {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,password);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal,credentials);
             Authentication authentication = authenticationManager.authenticate(token);
             if (authentication.isAuthenticated()) {
                 SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
