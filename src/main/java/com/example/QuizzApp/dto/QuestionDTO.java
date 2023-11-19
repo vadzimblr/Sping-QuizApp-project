@@ -6,20 +6,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
-
 @Data
-public class QuizDTO {
+public class QuestionDTO {
     @NotNull
     @NotEmpty
-    @NotBlank(message = "Quiz name cannot be empty")
+    @NotBlank(message = "Question cannot be empty")
     private String name;
-    private String introduction;
+    private String description;
     @NotNull
     @NotEmpty
-    private String hash;
-    private String thumbnail;
-    @NotNull
-    @NotEmpty
-    private Integer user;
-    private List<QuestionDTO> questions;
+    @NotBlank(message = "Duration cannot be empty")
+    private Integer question_duration;
+    private List<AnswerDTO> answers;
+    // Геттеры и сеттеры
 }
+

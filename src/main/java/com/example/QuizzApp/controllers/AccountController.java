@@ -8,11 +8,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/account/{username}")
+@RequestMapping("/account/{username}/addQuiz")
 public class AccountController {
-    @GetMapping("/addQuiz")
-    public ModelAndView showAddQuizzForm(@PathVariable String username){
-        ModelAndView mv = new ModelAndView("createQuizz");
+
+    @GetMapping
+    public ModelAndView showAddQuizForm(@PathVariable String username){
+        ModelAndView mv = new ModelAndView("createQuiz");
         mv.addObject("quiz",new QuizDTO());
 
         return mv;
