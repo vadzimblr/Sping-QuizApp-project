@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Base64;
 
 import static org.apache.commons.codec.digest.DigestUtils.sha256;
 
@@ -15,15 +16,19 @@ public class QuizHashGeneratorService {
     public QuizHashGeneratorService(QuizRepository quizRepository) {
         this.quizRepository = quizRepository;
     }
-    public String generateHash(){
+    public String generateHash() {
         String randomString = generateRandomString();
-        String hash = Arrays.toString(sha256(randomString));
-        String resultHash = hash.substring(0, 6).toUpperCase();
-        while(!checkUnique(resultHash)){
+        byte[] hashBytes = sha256(randomString.getBytes());
+        String resultHash = Base64.getEncoder().encodeToString(hashBytes);
+        resultHash = resultHash.substring(0, 6).toUpperCase();
+
+        while (!checkUnique(resultHash)) {
             randomString = generateRandomString();
-            hash = Arrays.toString(sha256(randomString));
-            resultHash = hash.substring(0, 6).toUpperCase();
+            hashBytes = sha256(randomString.getBytes());
+            resultHash = Base64.getEncoder().encodeToString(hashBytes);
+            resultHash = resultHash.substring(0, 6).toUpperCase();
         }
+
         return resultHash;
     }
     private Boolean checkUnique(String generatedHash){

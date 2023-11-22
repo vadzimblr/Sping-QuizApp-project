@@ -15,8 +15,6 @@ public class QuestionDTO {
     private String description;
     @NotNull
     @NotEmpty
-    @NotBlank(message = "Duration cannot be empty")
-    private Integer question_duration;
     private List<AnswerDTO> answers;
     // Геттеры и сеттеры
 }

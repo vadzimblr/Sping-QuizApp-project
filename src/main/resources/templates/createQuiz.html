@@ -7,7 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/bootstrap-grid.css}" >
   <link rel="stylesheet" th:href="@{/css/bootstrap-reboot.css}">
   <link rel="stylesheet" th:href="@{/css/styles.css}">
-
+  <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}" />
   <title>Quiz Creation Form</title>
 </head>
 <body>

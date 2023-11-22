@@ -14,12 +14,7 @@ public class QuizDTO {
     @NotBlank(message = "Quiz name cannot be empty")
     private String name;
     private String introduction;
-    @NotNull
-    @NotEmpty
-    private String hash;
+    private int duration; //Not null
     private String thumbnail;
-    @NotNull
-    @NotEmpty
-    private Integer user;
     private List<QuestionDTO> questions;
 }

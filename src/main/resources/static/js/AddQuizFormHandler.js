@@ -83,26 +83,26 @@ $(document).ready(() => {
         e.preventDefault();
 
         const response = {
-            quizName: $('[data-name="quizName"]').val(),
-            quizIntroduction: $('[data-introduction="quizIntroduction"]').val(),
-            quizDurationTime: $('[data-duration="quizDurationTime"]').val(),
+            name: $('[data-name="quizName"]').val(),
+            introduction: $('[data-introduction="quizIntroduction"]').val(),
+            duration: Number($('[data-duration="quizDurationTime"]').val())*60,
             questions: [],
         };
 
         $('[data-question]').each(function () {
-            const questionName = $(this).find('[data-name-question]').val();
-            const questionDescription = $(this).find('[data-description-question]').val();
+            const name = $(this).find('[data-name-question]').val();
+            const description = $(this).find('[data-description-question]').val();
             const questionMap = {
-                questionName,
-                questionDescription,
+                name,
+                description,
                 answers: [],
             };
 
             $(this).find('.answerContainer [data-answer]').each(function () {
-                const answerName = $(this).find('[data-answer-name]').val();
+                const name = $(this).find('[data-answer-name]').val();
                 const isCorrect = $(this).find('select[name="isCorrect[]"]').val();
                 const answerMap = {
-                    answerName,
+                    name,
                     isCorrect,
                 };
                 questionMap.answers.push(answerMap);
@@ -110,20 +110,24 @@ $(document).ready(() => {
 
             response.questions.push(questionMap);
         });
-// $.ajax({
-//         //   type: 'POST',
-//         //   url: '/createQuiz',
-//         //   contentType: 'application/json;charset=UTF-8',
-//         //   data: JSON.stringify(jsonData),
-//         //   success: function(response) {
-//         //     // Обработка успешного ответа от бэкенда
-//         //     console.log(response);
-//         //   },
-//         //   error: function(error) {
-//         //     // Обработка ошибки
-//         //     console.error(error);
-//         //   }
-//         // });
+        let csrfToken = $("meta[name='_csrf']").attr("content");
+        $.ajax({
+          type: 'POST',
+          url: '/api/createQuiz',
+          contentType: 'application/json;charset=UTF-8',
+            headers: {
+                'X-CSRF-TOKEN': csrfToken
+            },
+          data: JSON.stringify(response),
+          success: function(response) {
+            // Обработка успешного ответа от бэкенда
+            console.log(response);
+          },
+          error: function(error) {
+            // Обработка ошибки
+            console.error(error);
+          }
+        });
         console.log(JSON.stringify(response));
     });
 });

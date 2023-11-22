@@ -4,17 +4,15 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-@Entity(name = "quizzes")
-public class Quiz {
+@Entity(name ="answers")
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String introduction;
-    private int duration;
-    private String thumbnail;
-    private String hash;
+    @Column(name = "is_correct")
+    private Boolean isCorrect;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "question_id")
+    private Question question;
 }
