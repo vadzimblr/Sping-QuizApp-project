@@ -85,7 +85,6 @@ $(document).ready(() => {
         const response = {
             name: $('[data-name="quizName"]').val(),
             introduction: $('[data-introduction="quizIntroduction"]').val(),
-            duration: Number($('[data-duration="quizDurationTime"]').val())*60,
             questions: [],
         };
 

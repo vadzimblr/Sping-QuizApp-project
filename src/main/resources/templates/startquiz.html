@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Викторина</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-grid.css}" >
+    <link rel="stylesheet" th:href="@{/css/bootstrap-reboot.css}">
+    <link rel="stylesheet" th:href="@{/css/quiz-start-styles.css}">
+    <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}" />
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="jumbotron text-center" th:object = "${quiz}">
+        <h1 class="display-4" th:text="${quiz.getName()}">Название викторины</h1>
+        <p class="lead"  th:text="${quiz.getIntroduction()}" >Описание викторины</p>
+        <hr class="my-4">
+        <p>Нажмите кнопку "Старт", чтобы начать викторину.</p>
+        <input class="btn btn-primary btn-lg" type="submit" value="Старт" onclick="startQuiz()">
+    </div>
+</div>
+
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}" ></script>
+<script th:src="@{/js/bootstrap.js}" ></script>
+
+</body>
+</html>

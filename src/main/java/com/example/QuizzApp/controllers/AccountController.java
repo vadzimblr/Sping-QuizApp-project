@@ -15,7 +15,6 @@ public class AccountController {
     public ModelAndView showAddQuizForm(@PathVariable String username){
         ModelAndView mv = new ModelAndView("createQuiz");
         mv.addObject("quiz",new QuizDTO());
-
         return mv;
     }
 

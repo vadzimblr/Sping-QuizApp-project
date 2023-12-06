@@ -11,7 +11,6 @@ public class Quiz {
     private Integer id;
     private String name;
     private String introduction;
-    private int duration;
     private String thumbnail;
     private String hash;
     @ManyToOne

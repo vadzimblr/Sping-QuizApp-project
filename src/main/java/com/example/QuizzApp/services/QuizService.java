@@ -34,7 +34,6 @@ public class QuizService {
         quiz.setHash(hashGenerator.generateHash());
         quiz.setThumbnail(quizDTO.getThumbnail());
         quiz.setUser(user);
-        quiz.setDuration(quizDTO.getDuration());
         List<QuestionDTO> questionDTOList = quizDTO.getQuestions();
         quizRepository.save(quiz);
         for(QuestionDTO q: questionDTOList){
