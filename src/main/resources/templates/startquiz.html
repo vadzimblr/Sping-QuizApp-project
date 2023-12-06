@@ -17,9 +17,10 @@
     <div class="jumbotron text-center" th:object = "${quiz}">
         <h1 class="display-4" th:text="${quiz.getName()}">Название викторины</h1>
         <p class="lead"  th:text="${quiz.getIntroduction()}" >Описание викторины</p>
-        <hr class="my-4">
+        <hr class="my-4" >
         <p>Нажмите кнопку "Старт", чтобы начать викторину.</p>
-        <input class="btn btn-primary btn-lg" type="submit" value="Старт" onclick="startQuiz()">
+        <a class="btn btn-primary btn-lg" href="#" th:href="${currUrl + '/start-quiz'}">Старт</a>
+
     </div>
 </div>
 
