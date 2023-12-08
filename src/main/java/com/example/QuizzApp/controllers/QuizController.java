@@ -3,12 +3,12 @@ package com.example.QuizzApp.controllers;
 import com.example.QuizzApp.repositories.QuizRepository;
 import com.example.QuizzApp.utils.ModelToDtoMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDateTime;
@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Controller
 @RequestMapping("/quiz/{hash}")
 public class QuizController {
+    private final static DateTimeFormatter CUSTOM_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final QuizRepository quizRepository;
     private final ModelToDtoMapper modelToDtoMapper;
 
@@ -34,17 +35,28 @@ public class QuizController {
         return mv;
     }
     @GetMapping("/details/start-quiz")
-    public RedirectView startQuiz(@PathVariable String hash,RedirectAttributes redirectAttributes){
+    public RedirectView startQuiz(@PathVariable String hash,HttpServletRequest httpServletRequest){
+        HttpSession session = httpServletRequest.getSession();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        redirectAttributes.addFlashAttribute("startTime",currentDateTime);
-        return new RedirectView("/quiz/" + hash + "/");
+        session.setAttribute("startTime_"+hash,currentDateTime.format(CUSTOM_FORMATER));
+        return new RedirectView("/quiz/{hash}/");
     }
     @GetMapping("/")
-    public ModelAndView showQuizPage(@PathVariable String hash){
+    public ModelAndView showQuizPage(@PathVariable String hash, HttpServletRequest httpServletRequest ){
+        String sessionQuizStartTime = (String) httpServletRequest.getSession().getAttribute("startTime_"+hash);
+        if (sessionQuizStartTime == null) {
+            return new ModelAndView("redirect:/quiz/{hash}/details");
+        }
+        //LocalDateTime startTime = LocalDateTime.parse(sessionQuizStartTime,CUSTOM_FORMATER);
         ModelAndView mv = new ModelAndView("quiz");
         var quiz = quizRepository.findByHash(hash);
-        var quizDTO = modelToDtoMapper.quizToQuizDTO(quiz.get());
-        mv.addObject("quiz", quizDTO);
+        if(quiz.isPresent()){
+            var quizDTO = modelToDtoMapper.quizToQuizDTO(quiz.get());
+            mv.addObject("quiz", quizDTO);
+        }
+        else{
+            return new ModelAndView("redirect:/"); //tmp
+        }
         return mv;
     }
 }

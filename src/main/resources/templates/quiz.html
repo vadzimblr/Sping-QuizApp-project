@@ -10,86 +10,27 @@
     <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}" />
 </head>
 <body>
-<div class="quiz-container">
-    <h1 class="text-center mb-4">Викторина</h1>
+<div class="quiz-container" th:object = "${quiz}">
+    <h1 class="text-center mb-4 " th:text = "${quiz.getName()}">Викторина</h1>
     <form id="quiz-form">
-        <div class="question-container active" data-question="1">
-            <h2>Вопрос 1: Какие из перечисленных озер являются крупнейшими в мире?</h2>
-            <p>Дополнительное описание вопроса, если есть.</p>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q1a" value="a">
-                <label class="form-check-label">Аральское море</label>
+        <div th:each="question, questionIndex : ${quiz.getQuestions()}">
+            <div class="question-container" th:classappend="${questionIndex.index == 0 ? 'active' : ''}" th:data-question="${questionIndex.index + 1}">
+                <h2 th:text = "${question.getName()}">Вопрос</h2>
+                <p th:text = "${question.getDescription()}"> Дополнительное описание вопроса, если есть.</p>
+                <div th:each="answer: ${question.getAnswers()}" >
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input"
+                               th:id="'q' + ${questionIndex.index + 1} + 'a'"
+                               th:name="'q' + ${questionIndex.index + 1} + 'a'"
+                               value="a">
+                        <label class="form-check-label" th:text = "${answer.getName()}">Ответ</label>
+                    </div>
+                </div>
+                <div class="mt-auto">
+                    <button th:if="${questionIndex.index > 0}" type="button" class="btn btn-primary mx-auto" th:onclick="'prevQuestion(' + ${questionIndex.index + 1} + ')'" >Предыдущий вопрос</button>
+                    <button type="button" class="btn btn-primary mx-auto" th:onclick="'nextQuestion(' + ${questionIndex.index + 1} + ')'" >Следующий вопрос</button>
+                </div>
             </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q1b" value="b">
-                <label class="form-check-label">Каспийское море</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q1c" value="c">
-                <label class="form-check-label">Байкал</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q1d" value="d">
-                <label class="form-check-label">Верхнее озеро</label>
-            </div>
-            <div class="mt-auto">
-                <button type="button" class="btn btn-primary mx-auto" onclick="nextQuestion(1)">Следующий вопрос</button>
-            </div>
-        </div>
-
-        <div class="question-container" data-question="2">
-            <h2>Вопрос 2: Какие горные пики входят в список высочайших?</h2>
-            <p>Дополнительное описание вопроса, если есть.</p>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q2a" value="a">
-                <label class="form-check-label">Эверест</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q2b" value="b">
-                <label class="form-check-label">К2</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q2c" value="c">
-                <label class="form-check-label">Аконкагуа</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q2d" value="d">
-                <label class="form-check-label">Килиманджаро</label>
-            </div>
-            <div class="mt-auto">
-                <button type="button" class="btn btn-secondary mx-auto" onclick="prevQuestion(2)">Назад</button>
-                <button type="button" class="btn btn-primary mx-auto" onclick="nextQuestion(2)">Следующий вопрос</button>
-            </div>
-        </div>
-
-        <div class="question-container" data-question="3">
-            <h2>Вопрос 3: Какие планеты входят в Солнечную систему?</h2>
-            <p>Дополнительное описание вопроса, если есть.</p>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q3a" value="a">
-                <label class="form-check-label">Меркурий</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q3b" value="b">
-                <label class="form-check-label">Венера</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q3c" value="c">
-                <label class="form-check-label">Земля</label>
-            </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" name="q3d" value="d">
-                <label class="form-check-label">Марс</label>
-            </div>
-            <div class="mt-auto">
-                <button type="button" class="btn btn-secondary mx-auto" onclick="prevQuestion(3)">Назад</button>
-                <button type="button" class="btn btn-primary mx-auto" onclick="showResults()">Завершить викторину</button>
-            </div>
-        </div>
-
-        <div id="results-container">
-            <h2 class="text-center">Результаты викторины</h2>
-            <p id="quiz-results" class="text-center"></p>
         </div>
     </form>
 </div>
