@@ -5,6 +5,7 @@ import com.example.QuizzApp.dto.ResultDTO.ResultQuizDTO;
 import com.example.QuizzApp.models.User;
 import com.example.QuizzApp.repositories.UserRepository;
 import com.example.QuizzApp.services.QuizService;
+import com.example.QuizzApp.utils.QuizResultValidator;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -25,9 +26,11 @@ import java.util.Map;
 public class ApiController {
     private final QuizService quizService;
     private final UserRepository userRepository;
-    public ApiController(QuizService quizService, UserRepository userRepository) {
+    private final QuizResultValidator quizResultValidator;
+    public ApiController(QuizService quizService, UserRepository userRepository, QuizResultValidator quizResultValidator) {
         this.quizService = quizService;
         this.userRepository = userRepository;
+        this.quizResultValidator = quizResultValidator;
     }
     @PostMapping("/createQuiz")
     public ResponseEntity<String> saveData(@Valid @RequestBody QuizDTO quizDTO, BindingResult bindingResult, Principal principal) {
@@ -45,8 +48,16 @@ public class ApiController {
         return ResponseEntity.ok("Data saved successfully");
     }
     @PostMapping("/saveQuizResult")
-    public ResponseEntity<String> saveQuizResult(@RequestBody ResultQuizDTO resultQuizDTO){
-
+    public ResponseEntity<String> saveQuizResult(@RequestBody @Valid ResultQuizDTO resultQuizDTO, BindingResult bindingResult){
+        quizResultValidator.validate(resultQuizDTO,bindingResult);
+        if(bindingResult.hasErrors()){
+            List<FieldError> errors = bindingResult.getFieldErrors();
+            List<String> errorMessages = new ArrayList<>();
+            for (FieldError error : errors) {
+                errorMessages.add(error.getField() + ", Message: " + error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorMessages.toString());
+        }
         return ResponseEntity.ok("Success");
     }
 }

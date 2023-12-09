@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface QuizRepository extends JpaRepository<Quiz,Integer> {
     Optional<Quiz> findByHash(String hash);
+    boolean existsByHash(String hash);
 }
