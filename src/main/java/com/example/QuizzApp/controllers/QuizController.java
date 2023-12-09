@@ -59,4 +59,8 @@ public class QuizController {
         }
         return mv;
     }
+    @GetMapping("/stat")
+    public ModelAndView showUserStatistic(@PathVariable String hash){
+        return new ModelAndView("quizStat");
+    }
 }

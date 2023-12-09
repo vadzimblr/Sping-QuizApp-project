@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Статистика по викторине</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+  <link rel="stylesheet" th:href="@{/css/bootstrap-grid.css}" >
+  <link rel="stylesheet" th:href="@{/css/bootstrap-reboot.css}">
+  <link rel="stylesheet" th:href="@{/css/quiz-stat-styles.css}">
+  <link rel="stylesheet" th:href="@{/css/all.min.css}">
+  <meta th:name="${_csrf.parameterName}" th:content="${_csrf.token}" />
+</head>
+<body>
+
+<div class="container">
+  <h2 class="mb-4"><i class="fas fa-chart-bar"></i> Статистика по викторине</h2>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Имя викторины</th>
+      <th scope="col">Имя пользователя</th>
+      <th scope="col">Время начала</th>
+      <th scope="col">Время окончания</th>
+      <th scope="col">Счет</th>
+      <th scope="col">Правильные ответы</th>
+      <th scope="col">Среднее время (все пользователи)</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>Викторина 1</td>
+      <td>Пользователь 1</td>
+      <td>2023-12-09 12:00</td>
+      <td>2023-12-09 12:30</td>
+      <td>20</td>
+      <td>18</td>
+      <td>00:15:30</td>
+    </tr>
+    </tbody>
+  </table>
+
+</div>
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/bootstrap.bundle.js}" ></script>
+<script th:src="@{/js/bootstrap.js}" ></script>
+
+</body>
+</html>

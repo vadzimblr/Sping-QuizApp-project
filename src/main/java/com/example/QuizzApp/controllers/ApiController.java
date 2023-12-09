@@ -1,6 +1,7 @@
 package com.example.QuizzApp.controllers;
 
 import com.example.QuizzApp.dto.QuizDTO;
+import com.example.QuizzApp.dto.ResultDTO.ResultQuizDTO;
 import com.example.QuizzApp.models.User;
 import com.example.QuizzApp.repositories.UserRepository;
 import com.example.QuizzApp.services.QuizService;
@@ -28,7 +29,6 @@ public class ApiController {
         this.quizService = quizService;
         this.userRepository = userRepository;
     }
-
     @PostMapping("/createQuiz")
     public ResponseEntity<String> saveData(@Valid @RequestBody QuizDTO quizDTO, BindingResult bindingResult, Principal principal) {
         if(bindingResult.hasErrors()){
@@ -43,5 +43,10 @@ public class ApiController {
         User user = userRepository.findByUsername(principal.getName());
         quizService.saveData(quizDTO,user);
         return ResponseEntity.ok("Data saved successfully");
+    }
+    @PostMapping("/saveQuizResult")
+    public ResponseEntity<String> saveQuizResult(@RequestBody ResultQuizDTO resultQuizDTO){
+
+        return ResponseEntity.ok("Success");
     }
 }
