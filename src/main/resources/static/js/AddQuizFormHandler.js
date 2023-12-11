@@ -82,7 +82,7 @@ $(document).ready(() => {
     $('#quizForm').submit(function (e) {
         e.preventDefault();
 
-        const response = {
+        const request = {
             name: $('[data-name="quizName"]').val(),
             introduction: $('[data-introduction="quizIntroduction"]').val(),
             questions: [],
@@ -107,9 +107,9 @@ $(document).ready(() => {
                 questionMap.answers.push(answerMap);
             });
 
-            response.questions.push(questionMap);
+            request.questions.push(questionMap);
         });
-        let csrfToken = $("meta[name='_csrf']").attr("content");
+        const csrfToken = $("meta[name='_csrf']").attr("content");
         $.ajax({
           type: 'POST',
           url: '/api/createQuiz',
@@ -117,7 +117,7 @@ $(document).ready(() => {
             headers: {
                 'X-CSRF-TOKEN': csrfToken
             },
-          data: JSON.stringify(response),
+          data: JSON.stringify(request),
           success: function(response) {
             // Обработка успешного ответа от бэкенда
             console.log(response);
@@ -127,6 +127,6 @@ $(document).ready(() => {
             console.error(error);
           }
         });
-        console.log(JSON.stringify(response));
+        console.log(JSON.stringify(request));
     });
 });

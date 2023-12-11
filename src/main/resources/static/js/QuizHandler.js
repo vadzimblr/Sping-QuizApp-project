@@ -4,7 +4,7 @@ $(document).ready(() => {
         e.preventDefault();
         const currentUrl = window.location.href;
         const hash = currentUrl.match(/\/([^\/]+)\/?$/);
-        const response = {
+        const request = {
             quizHash: hash[1],
             questions: []
         }
@@ -12,17 +12,33 @@ $(document).ready(() => {
 
             const name = $(this).find('.quiz-name').text();
             const answers = [];
+
             $(this).find('input[type="checkbox"]:checked').each(function() {
-                answers.push($(this).val());
+                answers.push({name:$(this).val()});
             });
             const question = {
                 name: name,
                 answers:answers
             }
-            response.questions.push(question)
+            request.questions.push(question)
         });
-        console.log(JSON.stringify(response));
-
+        console.log(JSON.stringify(request));
+        const csrfToken = $("meta[name='_csrf']").attr("content");
+        $.ajax({
+            type: 'POST',
+            url: '/api/saveQuizResult',
+            contentType: 'application/json;charset=UTF-8',
+            headers:{
+                'X-CSRF-TOKEN':csrfToken
+            },
+            data: JSON.stringify(request),
+            success:function (response){
+                console.log(response)
+            },
+            error:function (error){
+                console.log(error)
+            }
+        })
     });
 });
 const nextQuestion = (currentQuestion) => {

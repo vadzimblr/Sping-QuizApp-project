@@ -6,7 +6,10 @@ import com.example.QuizzApp.models.User;
 import com.example.QuizzApp.repositories.UserRepository;
 import com.example.QuizzApp.services.QuizService;
 import com.example.QuizzApp.utils.QuizResultValidator;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -48,16 +51,24 @@ public class ApiController {
         return ResponseEntity.ok("Data saved successfully");
     }
     @PostMapping("/saveQuizResult")
-    public ResponseEntity<String> saveQuizResult(@RequestBody @Valid ResultQuizDTO resultQuizDTO, BindingResult bindingResult){
+    public ResponseEntity<String> saveQuizResult(@Valid @RequestBody  ResultQuizDTO resultQuizDTO, BindingResult bindingResult){
         quizResultValidator.validate(resultQuizDTO,bindingResult);
         if(bindingResult.hasErrors()){
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            List<String> errorMessages = new ArrayList<>();
-            for (FieldError error : errors) {
-                errorMessages.add(error.getField() + ", Message: " + error.getDefaultMessage());
+            List<String> errors = new ArrayList<>();
+
+            for(var error: bindingResult.getAllErrors()){
+                errors.add(error.getCode() + ": " + error.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(errorMessages.toString());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String jsonResponse;
+            try{
+                jsonResponse = objectMapper.writeValueAsString(errors);
+            } catch (JsonProcessingException e) {
+                jsonResponse = "{\"errors\": [\"Error converting to JSON\"]}";
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(jsonResponse);
         }
+
         return ResponseEntity.ok("Success");
     }
 }

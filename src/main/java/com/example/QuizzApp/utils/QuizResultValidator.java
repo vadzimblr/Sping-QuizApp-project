@@ -24,16 +24,17 @@ public class QuizResultValidator implements Validator {
     public void validate(Object target, Errors errors) {
         ResultQuizDTO resultObject = (ResultQuizDTO) target;
         if(!quizRepository.existsByHash(resultObject.getQuizHash())){
-            errors.rejectValue("QuizNotExists","[QuizNotExists]: Data not synchronized with the server");
+            errors.reject("QuizNotExists","[QuizNotExists]: Data not synchronized with the server");
         }
         for(var question: resultObject.getQuestions()){
             if(!questionRepository.existsByName(question.getName())){
-                errors.rejectValue("QuestionNotExists","[QuestionNotExists]: Data not synchronized with the server");
+                errors.reject("QuestionNotExists","[QuestionNotExists]: Data not synchronized with the server");
                 break;
             }
             else {
-                if(question.getAnswers() == null){
-                    errors.rejectValue("AnswersEmptyError","Answers can't be empty");
+                if(question.getAnswers() == null || question.getAnswers().isEmpty()){
+                    errors.reject("AnswersEmptyError","Answers can't be empty");
+                    break;
                 }
             }
         }

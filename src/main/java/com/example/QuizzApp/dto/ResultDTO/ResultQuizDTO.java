@@ -1,6 +1,5 @@
 package com.example.QuizzApp.dto.ResultDTO;
 
-import com.example.QuizzApp.dto.QuestionDTO;
 import lombok.Data;
 
 import java.util.List;
