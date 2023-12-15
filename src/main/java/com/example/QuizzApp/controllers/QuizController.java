@@ -47,7 +47,6 @@ public class QuizController {
         if (sessionQuizStartTime == null) {
             return new ModelAndView("redirect:/quiz/{hash}/details");
         }
-        //LocalDateTime startTime = LocalDateTime.parse(sessionQuizStartTime,CUSTOM_FORMATER);
         ModelAndView mv = new ModelAndView("quiz");
         var quiz = quizRepository.findByHash(hash);
         if(quiz.isPresent()){
