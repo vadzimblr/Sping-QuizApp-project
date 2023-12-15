@@ -14,4 +14,16 @@ public interface AnswerRepository extends JpaRepository<Answer, Integer> {
             "JOIN answers ON questions.id = answers.question_id " +
             "WHERE quizzes.hash = :hash AND questions.name = :questionName AND answers.is_correct = true", nativeQuery = true)
     List<String> getCorrectAnswers(@Param("hash") String hash, @Param("questionName") String questionName);
+    @Query(value = "SELECT answers.name " +
+            "FROM quizzes " +
+            "JOIN questions ON quizzes.id = questions.quiz_id " +
+            "JOIN answers ON questions.id = answers.question_id " +
+            "WHERE quizzes.hash = :hash", nativeQuery = true)
+    List<String> getAllAnswers(@Param("hash") String hash);
+    @Query(value = "SELECT answers.name " +
+            "FROM quizzes " +
+            "JOIN questions ON quizzes.id = questions.quiz_id " +
+            "JOIN answers ON questions.id = answers.question_id " +
+            "WHERE quizzes.hash = :hash AND answers.is_correct = true", nativeQuery = true)
+    List<String> getAllCorrectAnswers(@Param("hash") String hash);
 }
