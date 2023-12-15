@@ -24,18 +24,18 @@
       <th scope="col">Время окончания</th>
       <th scope="col">Счет</th>
       <th scope="col">Правильные ответы</th>
-      <th scope="col">Среднее время (все пользователи)</th>
+      <th scope="col">Затраченное время (в секундах)</th>
     </tr>
     </thead>
-    <tbody>
-    <tr>
-      <td>Викторина 1</td>
-      <td>Пользователь 1</td>
-      <td>2023-12-09 12:00</td>
-      <td>2023-12-09 12:30</td>
-      <td>20</td>
-      <td>18</td>
-      <td>00:15:30</td>
+    <tbody th:object = "${stats}">
+    <tr th:each="st : ${stats}">
+      <td th:text="${st.quizName}">Викторина 1</td>
+      <td th:text="${st.username}">Пользователь 1</td>
+      <td th:text="${st.startedAt}">2023-12-09 12:00</td>
+      <td th:text="${st.finishedAt}">2023-12-09 12:30</td>
+      <td th:text="${st.score}">20</td>
+      <td th:text="${st.correctAnswers}">18</td>
+      <td th:text="${st.timeSpent}">00:15:30</td>
     </tr>
     </tbody>
   </table>

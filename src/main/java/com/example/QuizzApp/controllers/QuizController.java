@@ -1,6 +1,9 @@
 package com.example.QuizzApp.controllers;
 
+import com.example.QuizzApp.dto.QuizStatisticDTO;
+import com.example.QuizzApp.models.QuizStatistic;
 import com.example.QuizzApp.repositories.QuizRepository;
+import com.example.QuizzApp.repositories.QuizStatisticRepository;
 import com.example.QuizzApp.utils.ModelToDtoMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -13,6 +16,9 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/quiz/{hash}")
@@ -20,10 +26,12 @@ public class QuizController {
     private final static DateTimeFormatter CUSTOM_FORMATER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final QuizRepository quizRepository;
     private final ModelToDtoMapper modelToDtoMapper;
+    private final QuizStatisticRepository quizStatisticRepository;
 
-    public QuizController(QuizRepository quizRepository, ModelToDtoMapper modelToDtoMapper) {
+    public QuizController(QuizRepository quizRepository, ModelToDtoMapper modelToDtoMapper, QuizStatisticRepository quizStatisticRepository) {
         this.quizRepository = quizRepository;
         this.modelToDtoMapper = modelToDtoMapper;
+        this.quizStatisticRepository = quizStatisticRepository;
     }
 
     @GetMapping("/details")
@@ -60,6 +68,11 @@ public class QuizController {
     }
     @GetMapping("/stat")
     public ModelAndView showUserStatistic(@PathVariable String hash){
-        return new ModelAndView("quizStat");
+        var mv = new ModelAndView("quizStat");
+        Optional<Integer> id = quizRepository.findIdByHash(hash);
+        List<QuizStatistic> statisticList = quizStatisticRepository.findAllByQuizId(id.get());
+        List<QuizStatisticDTO> statisticDTO = modelToDtoMapper.listQuizStatisticToDTO(statisticList);
+        mv.addObject("stats", statisticDTO);
+        return mv;
     }
 }
